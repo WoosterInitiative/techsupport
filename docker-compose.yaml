@@ -1,0 +1,30 @@
+version: '3'
+services:
+
+###--- Home Assistant Setup ---###
+  tiddlywiki:
+    container_name: tiddlywiki
+    image: mazzolina/tiddlywiki
+    volumes:
+      - /opt/appdata/tiddlywiki:/var/lib/tiddlywiki
+      - /etc/localtime:/etc/localtime:ro
+    restart: always
+    environment:
+      - PUID=1000
+      - GUID=1000
+    labels:
+      traefik.enable: "true"
+      traefik.frontend.redirect.entryPoint: "https"
+      traefik.frontend.rule: "Host:tiddlywiki.wooster.xyz"
+      traefik.port: "8080"
+      traefik.docker.network: "plexguide"
+    # ports:
+    #   - 8123:8123
+    networks:
+      # - homeassistant
+      - plexguide
+
+networks:
+  plexguide:
+    external:
+      name: plexguide
